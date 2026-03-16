@@ -2,15 +2,15 @@ Security Log Analyzer
 
 A Python-based cybersecurity project that analyzes authentication logs to detect suspicious activities such as brute-force login attempts and potential attacks.
 
-The tool simulates a Security Operations Center (SOC) monitoring workflow by analyzing logs, detecting threats, generating reports, and visualizing attack patterns.
+The project simulates basic Security Operations Center (SOC) monitoring by analyzing logs, generating incident reports, and visualizing attack patterns.
 
 Project Overview
 
-This project demonstrates how security analysts can automate log monitoring and incident detection using Python.
+This tool demonstrates how security teams can automate log monitoring and incident detection.
 
 The system performs the following tasks:
 
-Log analysis for authentication events
+Authentication log analysis
 
 Detection of suspicious login attempts
 
@@ -20,26 +20,26 @@ Threat intelligence correlation
 
 Security incident report generation
 
-Real-time monitoring of log activity
+Real-time monitoring of login activity
 
-Visualization of attack data through a dashboard
+Attack visualization using dashboards
 
 Geographic mapping of attack sources
 
 Key Features
 Log Analysis
 
-The system reads authentication logs stored in:
+Authentication logs are stored in:
 
 sample_logs.csv
 
-Each log entry contains the following fields:
+Each log entry contains:
 
 Field	Description
 timestamp	Time of login attempt
-user	Username attempting authentication
+user	Username attempting login
 ip	Source IP address
-status	Login result (success / failed)
+status	Login result
 
 Example:
 
@@ -49,14 +49,14 @@ Brute Force Detection
 
 The analyzer groups failed login attempts by IP address.
 
-Severity levels are determined using the following logic:
+Severity is determined based on the number of attempts.
 
 Attempts	Severity
 1–2	Low
 3–4	Medium
 5+	High
 
-Example output:
+Example detection output:
 
 Suspicious IP Detected
 IP Address: 8.8.8.8
@@ -64,7 +64,7 @@ Failed Attempts: 3
 Severity: MEDIUM
 Threat Intelligence Correlation
 
-Suspicious IP addresses are checked against a threat intelligence database.
+Suspicious IPs are compared with a threat intelligence database.
 
 File used:
 
@@ -76,7 +76,7 @@ ip	threat_level
 192.168.1.10	High
 10.0.0.5	Medium
 
-If an IP appears in the threat database, its risk level is included in the incident report.
+Matching IPs are flagged as higher risk.
 
 Security Incident Report
 
@@ -92,13 +92,11 @@ IP Address	Failed Attempts	Severity	Threat Level
 8.8.8.8	3	Medium	High
 Real-Time Log Monitoring
 
-The system includes a real-time monitoring module.
-
-Script used:
+The tool includes a real-time monitoring script.
 
 realtime_monitor.py
 
-This continuously monitors logs and prints alerts when suspicious activity is detected.
+This continuously scans log updates and prints alerts when suspicious activity occurs.
 
 Example alert:
 
@@ -108,9 +106,9 @@ IP: 8.8.8.8
 Time: 2026-03-16 10:01
 Security Dashboard
 
-The project includes a visualization dashboard built with Streamlit.
+The project includes a Streamlit-based dashboard.
 
-Run the dashboard using:
+Run:
 
 streamlit run dashboard.py
 
@@ -130,7 +128,7 @@ Attack Geo-Location Map
 
 The dashboard visualizes attack sources on a world map.
 
-Severity levels are represented using colors:
+Severity levels are represented by colors:
 
 Color	Severity
 Yellow	Low
@@ -153,57 +151,43 @@ Installation
 
 Clone the repository:
 
-git clone https://github.com/yourusername/security-log-analyzer.git
+git clone https://github.com/Praneetha2114/security-log-analyzer.git
 
 Navigate to the project folder:
 
 cd security-log-analyzer
 
-Install required dependencies:
+Install dependencies:
 
 pip install pandas streamlit requests pydeck openpyxl
 Usage
 
-Run the log analyzer:
+Run log analysis:
 
 python log_analyzer.py
 
-Run the real-time monitoring script:
+Run real-time monitoring:
 
 python realtime_monitor.py
 
-Launch the dashboard:
+Launch dashboard:
 
 streamlit run dashboard.py
-Example Use Cases
-
-This project demonstrates concepts used in:
-
-Security Operations Centers (SOC)
-
-SIEM log analysis
-
-Brute-force attack detection
-
-Threat intelligence analysis
-
-Security monitoring dashboards
-
 Technologies Used
 Technology	Purpose
 Python	Core programming
-Pandas	Log analysis
+Pandas	Data analysis
 Streamlit	Dashboard
 PyDeck	Map visualization
 Requests	IP geolocation
-OpenPyXL	Excel report generation
+OpenPyXL	Excel reporting
 Author
 
 Praneetha
 
-GitHub:
+GitHub
 https://github.com/Praneetha2114
 
 License
 
-This project is created for educational and portfolio purposes.
+Educational and portfolio project.
