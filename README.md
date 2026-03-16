@@ -1,106 +1,122 @@
-Security Log Analyzer
+# Security Log Analyzer
 
 A Python-based cybersecurity project that analyzes authentication logs to detect suspicious login attempts and potential brute-force attacks.
 
-Project Overview
+---
 
-This project simulates a Security Operations Center (SOC) monitoring workflow.
+## Project Overview
 
-Main capabilities:
+This project simulates a **Security Operations Center (SOC)** monitoring workflow.
 
-Log analysis
+### Main capabilities:
 
-Suspicious login detection
+- **Log analysis**
+- **Suspicious login detection**
+- **Brute-force attack detection**
+- **Threat intelligence correlation**
+- **Incident report generation**
+- **Real-time monitoring**
+- **Security dashboard visualization**
+- **Geographic attack mapping**
 
-Brute-force attack detection
+---
 
-Threat intelligence correlation
+## Log Analysis
 
-Incident report generation
+Authentication logs are stored in: **sample_logs.csv**
 
-Real-time monitoring
+### Example structure:
 
-Security dashboard visualization
+| timestamp | user | ip | status |
+|-----------|------|----|----|
+| 2026-03-16 10:00 | admin | 8.8.8.8 | failed |
 
-Geographic attack mapping
+---
 
-Log Analysis
+## Brute Force Detection
 
-Authentication logs are stored in:
+Failed login attempts are grouped by **IP address**.
 
-sample_logs.csv
+| Attempts | Severity |
+|----------|----------|
+| 1–2 | Low |
+| 3–4 | Medium |
+| 5+ | High |
 
-Example structure:
+### Example detection output:
 
-timestamp	user	ip	status
-2026-03-16 10:00	admin	8.8.8.8	failed
-Brute Force Detection
-
-Failed login attempts are grouped by IP address.
-
-Attempts	Severity
-1–2	Low
-3–4	Medium
-5+	High
-
-Example detection output:
-
+```
 Suspicious IP Detected
 IP Address: 8.8.8.8
 Failed Attempts: 3
 Severity: MEDIUM
-Threat Intelligence
+```
 
-Suspicious IPs are checked against a threat intelligence dataset.
+---
 
-threat_intel.csv
+## Threat Intelligence
 
-Example dataset:
+Suspicious IPs are checked against a **threat intelligence dataset**.
 
-ip	threat_level
-192.168.1.10	High
-10.0.0.5	Medium
-Security Incident Report
+File: **threat_intel.csv**
 
-Detected incidents are exported to:
+### Example dataset:
 
-security_incident_report.xlsx
+| ip | threat_level |
+|----|--------------|
+| 192.168.1.10 | High |
+| 10.0.0.5 | Medium |
 
-Example report:
+---
 
-IP Address	Failed Attempts	Severity	Threat Level
-8.8.8.8	3	Medium	High
-Real-Time Monitoring
+## Security Incident Report
 
-The system includes a monitoring script:
+Detected incidents are exported to: **security_incident_report.xlsx**
 
-realtime_monitor.py
+### Example report:
 
-Example alert:
+| IP Address | Failed Attempts | Severity | Threat Level |
+|-----------|-----------------|----------|--------------|
+| 8.8.8.8 | 3 | Medium | High |
 
+---
+
+## Real-Time Monitoring
+
+The system includes a monitoring script: **realtime_monitor.py**
+
+### Example alert:
+
+```
 FAILED LOGIN DETECTED
 User: admin
 IP: 8.8.8.8
 Time: 2026-03-16 10:01
-Security Dashboard
+```
+
+---
+
+## Security Dashboard
 
 Launch the dashboard with:
 
+```bash
 streamlit run dashboard.py
+```
 
-The dashboard shows:
+### The dashboard shows:
 
-security metrics
+- **Security metrics**
+- **Failed login statistics**
+- **Suspicious IP activity**
+- **User activity analysis**
+- **Attack geo-location map**
 
-failed login statistics
+---
 
-suspicious IP activity
+## Project Structure
 
-user activity analysis
-
-attack geo-location map
-
-Project Structure
+```
 security-log-analyzer
 │
 ├── log_analyzer.py
@@ -110,43 +126,63 @@ security-log-analyzer
 ├── sample_logs.csv
 ├── security_incident_report.xlsx
 └── README.md
-Installation
+```
 
-Clone the repository
+---
 
-git clone https://github.com/Praneetha2114/security-log-analyzer.git
+## Installation
 
-Navigate to the project folder
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Praneetha2114/security-log-analyzer.git
+   ```
 
-cd security-log-analyzer
+2. **Navigate to the project folder**
+   ```bash
+   cd security-log-analyzer
+   ```
 
-Install dependencies
+3. **Install dependencies**
+   ```bash
+   pip install pandas streamlit requests pydeck openpyxl
+   ```
 
-pip install pandas streamlit requests pydeck openpyxl
-Usage
+---
 
-Run log analysis
+## Usage
 
-python log_analyzer.py
+- **Run log analysis**
+  ```bash
+  python log_analyzer.py
+  ```
 
-Run real-time monitoring
+- **Run real-time monitoring**
+  ```bash
+  python realtime_monitor.py
+  ```
 
-python realtime_monitor.py
+- **Launch dashboard**
+  ```bash
+  streamlit run dashboard.py
+  ```
 
-Launch dashboard
+---
 
-streamlit run dashboard.py
-Technologies Used
-Technology	Purpose
-Python	Core programming
-Pandas	Log analysis
-Streamlit	Dashboard
-PyDeck	Geo visualization
-Requests	IP lookup
-OpenPyXL	Excel reporting
-Author
+## Technologies Used
 
-Praneetha
+| Technology | Purpose |
+|-----------|---------|
+| **Python** | Core programming |
+| **Pandas** | Log analysis |
+| **Streamlit** | Dashboard |
+| **PyDeck** | Geo visualization |
+| **Requests** | IP lookup |
+| **OpenPyXL** | Excel reporting |
 
-GitHub
-https://github.com/Praneetha2114
+---
+
+## Author
+
+**Praneetha**
+
+- **GitHub:** https://github.com/Praneetha2114
