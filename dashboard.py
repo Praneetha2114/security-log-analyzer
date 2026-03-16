@@ -2,15 +2,15 @@ import streamlit as st
 import pandas as pd
 import requests
 import ipaddress
+import pydeck as pdk
 
 st.title("Security Log Analyzer Dashboard")
 
-# Load logs
 df = pd.read_csv("sample_logs.csv")
 
-# -------------------------
-# Metrics Section
-# -------------------------
+# --------------------------
+# Metrics
+# --------------------------
 
 st.subheader("Log Summary")
 
@@ -24,9 +24,9 @@ col1.metric("Total Logs", total_logs)
 col2.metric("Failed Logins", failed_logs)
 col3.metric("Successful Logins", success_logs)
 
-# -------------------------
-# Failed login analysis
-# -------------------------
+# --------------------------
+# Failed Login Analysis
+# --------------------------
 
 st.subheader("Failed Login Attempts by IP")
 
@@ -38,9 +38,9 @@ st.dataframe(failed_by_ip)
 
 st.bar_chart(failed_by_ip.set_index("ip"))
 
-# -------------------------
-# Helper functions
-# -------------------------
+# --------------------------
+# Helper Functions
+# --------------------------
 
 def is_public_ip(ip):
     try:
@@ -54,7 +54,6 @@ def get_location(ip):
     try:
 
         response = requests.get(f"http://ip-api.com/json/{ip}")
-
         data = response.json()
 
         return {
@@ -68,15 +67,30 @@ def get_location(ip):
         return None
 
 
-# -------------------------
-# Geo Location Map
-# -------------------------
+def get_severity_color(attempts):
+
+    if attempts >= 5:
+        return [255, 0, 0]      # red
+
+    elif attempts >= 3:
+        return [255, 140, 0]    # orange
+
+    else:
+        return [255, 215, 0]    # yellow
+
+
+# --------------------------
+# Attack Map
+# --------------------------
 
 st.subheader("Attack Geo Location Map")
 
 locations = []
 
-for ip in failed_by_ip["ip"]:
+for _, row in failed_by_ip.iterrows():
+
+    ip = row["ip"]
+    attempts = row["Attempts"]
 
     if not is_public_ip(ip):
         continue
@@ -85,28 +99,52 @@ for ip in failed_by_ip["ip"]:
 
     if loc and loc["lat"] is not None:
 
-        locations.append(loc)
+        locations.append({
+            "ip": ip,
+            "latitude": loc["lat"],
+            "longitude": loc["lon"],
+            "attempts": attempts,
+            "color": get_severity_color(attempts)
+        })
 
 if locations:
 
     map_df = pd.DataFrame(locations)
 
-    st.map(map_df.rename(columns={
-        "lat": "latitude",
-        "lon": "longitude"
-    }))
+    layer = pdk.Layer(
+        "ScatterplotLayer",
+        data=map_df,
+        get_position="[longitude, latitude]",
+        get_fill_color="color",
+        get_radius=200000,
+        pickable=True
+    )
 
-    st.subheader("Attack Source Locations")
+    view_state = pdk.ViewState(
+        latitude=20,
+        longitude=0,
+        zoom=1
+    )
+
+    deck = pdk.Deck(
+        layers=[layer],
+        initial_view_state=view_state,
+        tooltip={"text": "IP: {ip}\nAttempts: {attempts}"}
+    )
+
+    st.pydeck_chart(deck)
+
+    st.subheader("Attack Sources")
 
     st.dataframe(map_df)
 
 else:
 
-    st.warning("No public IP location data available.")
+    st.warning("No public attack IPs detected.")
 
-# -------------------------
+# --------------------------
 # User Activity
-# -------------------------
+# --------------------------
 
 st.subheader("User Login Activity")
 
@@ -114,9 +152,9 @@ user_activity = df.groupby("user").size().reset_index(name="Log Events")
 
 st.bar_chart(user_activity.set_index("user"))
 
-# -------------------------
+# --------------------------
 # Raw Logs
-# -------------------------
+# --------------------------
 
 st.subheader("Raw Logs")
 
