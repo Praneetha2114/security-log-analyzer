@@ -1,13 +1,17 @@
 import streamlit as st
 import pandas as pd
 import requests
-import pydeck as pdk
+import ipaddress
 
 st.title("Security Log Analyzer Dashboard")
 
+# Load logs
 df = pd.read_csv("sample_logs.csv")
 
-# Basic metrics
+# -------------------------
+# Metrics Section
+# -------------------------
+
 st.subheader("Log Summary")
 
 total_logs = len(df)
@@ -20,23 +24,37 @@ col1.metric("Total Logs", total_logs)
 col2.metric("Failed Logins", failed_logs)
 col3.metric("Successful Logins", success_logs)
 
+# -------------------------
 # Failed login analysis
+# -------------------------
+
 st.subheader("Failed Login Attempts by IP")
 
 failed = df[df["status"] == "failed"]
+
 failed_by_ip = failed.groupby("ip").size().reset_index(name="Attempts")
 
 st.dataframe(failed_by_ip)
 
 st.bar_chart(failed_by_ip.set_index("ip"))
 
-# Geo location section
-st.subheader("Attack Geo Location Map")
+# -------------------------
+# Helper functions
+# -------------------------
+
+def is_public_ip(ip):
+    try:
+        return ipaddress.ip_address(ip).is_global
+    except:
+        return False
+
 
 def get_location(ip):
 
     try:
+
         response = requests.get(f"http://ip-api.com/json/{ip}")
+
         data = response.json()
 
         return {
@@ -50,27 +68,56 @@ def get_location(ip):
         return None
 
 
+# -------------------------
+# Geo Location Map
+# -------------------------
+
+st.subheader("Attack Geo Location Map")
+
 locations = []
 
 for ip in failed_by_ip["ip"]:
+
+    if not is_public_ip(ip):
+        continue
+
     loc = get_location(ip)
 
     if loc and loc["lat"] is not None:
+
         locations.append(loc)
 
 if locations:
 
     map_df = pd.DataFrame(locations)
 
-    st.map(map_df.rename(columns={"lat":"latitude","lon":"longitude"}))
+    st.map(map_df.rename(columns={
+        "lat": "latitude",
+        "lon": "longitude"
+    }))
 
-    st.write(map_df)
+    st.subheader("Attack Source Locations")
+
+    st.dataframe(map_df)
 
 else:
 
-    st.write("No location data available.")
+    st.warning("No public IP location data available.")
 
-# Raw logs
+# -------------------------
+# User Activity
+# -------------------------
+
+st.subheader("User Login Activity")
+
+user_activity = df.groupby("user").size().reset_index(name="Log Events")
+
+st.bar_chart(user_activity.set_index("user"))
+
+# -------------------------
+# Raw Logs
+# -------------------------
+
 st.subheader("Raw Logs")
 
 st.dataframe(df)
