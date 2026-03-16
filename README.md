@@ -2,11 +2,11 @@ Security Log Analyzer
 
 A Python-based cybersecurity project that analyzes authentication logs to detect suspicious activities such as brute-force login attempts and potential attacks.
 
-The project simulates basic Security Operations Center (SOC) monitoring by analyzing logs, generating incident reports, and visualizing attack patterns.
+The tool simulates basic Security Operations Center (SOC) monitoring by analyzing logs, detecting threats, generating reports, and visualizing attack patterns.
 
 Project Overview
 
-This tool demonstrates how security teams can automate log monitoring and incident detection.
+This project demonstrates how security analysts can automate log monitoring and incident detection using Python.
 
 The system performs the following tasks:
 
@@ -20,36 +20,36 @@ Threat intelligence correlation
 
 Security incident report generation
 
-Real-time monitoring of login activity
+Real-time monitoring of log activity
 
-Attack visualization using dashboards
+Visualization of attack data through dashboards
 
 Geographic mapping of attack sources
 
 Key Features
-Log Analysis
+1. Log Analysis
 
-Authentication logs are stored in:
+The system reads authentication logs stored in:
 
 sample_logs.csv
 
-Each log entry contains:
+Each log entry contains the following fields:
 
 Field	Description
 timestamp	Time of login attempt
-user	Username attempting login
+user	Username attempting authentication
 ip	Source IP address
-status	Login result
+status	Login result (success / failed)
 
-Example:
+Example log entry:
 
 timestamp	user	ip	status
 2026-03-16 10:00	admin	8.8.8.8	failed
-Brute Force Detection
+2. Brute Force Detection
 
 The analyzer groups failed login attempts by IP address.
 
-Severity is determined based on the number of attempts.
+Attack severity is determined using the following logic:
 
 Attempts	Severity
 1–2	Low
@@ -62,9 +62,9 @@ Suspicious IP Detected
 IP Address: 8.8.8.8
 Failed Attempts: 3
 Severity: MEDIUM
-Threat Intelligence Correlation
+3. Threat Intelligence Correlation
 
-Suspicious IPs are compared with a threat intelligence database.
+Suspicious IP addresses are checked against a threat intelligence dataset.
 
 File used:
 
@@ -76,9 +76,9 @@ ip	threat_level
 192.168.1.10	High
 10.0.0.5	Medium
 
-Matching IPs are flagged as higher risk.
+If a suspicious IP matches the database, the threat level is included in the incident report.
 
-Security Incident Report
+4. Security Incident Report
 
 Detected incidents are exported to an Excel report.
 
@@ -90,13 +90,15 @@ Example report:
 
 IP Address	Failed Attempts	Severity	Threat Level
 8.8.8.8	3	Medium	High
-Real-Time Log Monitoring
+5. Real-Time Log Monitoring
 
-The tool includes a real-time monitoring script.
+The system includes a real-time monitoring module.
+
+Script used:
 
 realtime_monitor.py
 
-This continuously scans log updates and prints alerts when suspicious activity occurs.
+This continuously monitors logs and prints alerts when suspicious activity is detected.
 
 Example alert:
 
@@ -104,31 +106,31 @@ FAILED LOGIN DETECTED
 User: admin
 IP: 8.8.8.8
 Time: 2026-03-16 10:01
-Security Dashboard
+6. Security Dashboard
 
-The project includes a Streamlit-based dashboard.
+The project includes a visualization dashboard built with Streamlit.
 
-Run:
+Run the dashboard using:
 
 streamlit run dashboard.py
 
 The dashboard displays:
 
-Security metrics
+security metrics
 
-Failed login statistics
+failed login statistics
 
-Suspicious IP activity
+suspicious IP activity
 
-User login analysis
+user login analysis
 
-Raw log data
+raw log data
 
-Attack Geo-Location Map
+7. Attack Geo-Location Map
 
 The dashboard visualizes attack sources on a world map.
 
-Severity levels are represented by colors:
+Severity levels are represented using colors:
 
 Color	Severity
 Yellow	Low
@@ -162,7 +164,7 @@ Install dependencies:
 pip install pandas streamlit requests pydeck openpyxl
 Usage
 
-Run log analysis:
+Run the log analyzer:
 
 python log_analyzer.py
 
@@ -185,7 +187,7 @@ Author
 
 Praneetha
 
-GitHub
+GitHub:
 https://github.com/Praneetha2114
 
 License
